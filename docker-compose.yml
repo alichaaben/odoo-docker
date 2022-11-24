@@ -1,0 +1,26 @@
+version: '3'
+services:
+    odoo:
+        container_name: odoo
+        image: odoo:latest
+        volumes:
+            - ./addons-extra:/mnt/extra-addons
+            - ./etc/odoo:/etc/odoo
+            - odoo-web-data:/var/lib/odoo
+        ports:
+            - "8069:8069"
+        depends_on:
+            - postgres
+    postgres:
+        image: postgres:13
+        environment:
+            - POSTGRES_DB=postgres
+            - POSTGRES_PASSWORD=odoo
+            - POSTGRES_USER=odoo
+            - PGDATA=/var/lib/postgresql/data/pgdata
+        volumes:
+            - odoo-db-data:/var/lib/postgresql/data/pgdata
+    
+volumes:
+    odoo-web-data:
+    odoo-db-data:
